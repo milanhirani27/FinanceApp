@@ -1,13 +1,15 @@
+// src/screens/DashboardScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { PieChart, LineChart } from 'react-native-chart-kit';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
-
-const { width } = Dimensions.get('window');
+import { ScrollView, Dimensions, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Card from '../components/Card/Card';
+import TransactionItem from '../components/TransactionItem/TransactionItem';
+import ShowMoreButton from '../components/ShowMoreButton/ShowMoreButton';
+import PieChartCard from '../components/PieChartCard/PieChartCard';
+import LineChartCard from '../components/LineChartCard/LineChartCard';
 
 const DashboardScreen = () => {
-  const navigation = useNavigation(); // Initialize navigation
+  const navigation = useNavigation();
 
   // Sample data
   const totalBalance = 12000;
@@ -58,7 +60,7 @@ const DashboardScreen = () => {
     datasets: [
       {
         data: [5000, 6000, 5500, 7000, 6500, 8000, 6000],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // Purple
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
         strokeWidth: 2,
       },
     ],
@@ -70,133 +72,50 @@ const DashboardScreen = () => {
   return (
     <ScrollView style={styles.container}>
       {/* Total Balance */}
-      <View style={styles.card}>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Total Balance</Text>
-          <Text style={styles.cardAmount}>₹{totalBalance.toLocaleString()}</Text>
-        </View>
-      </View>
+      <Card title="Total Balance">
+        <Text style={styles.cardAmount}>₹{totalBalance.toLocaleString()}</Text>
+      </Card>
 
       {/* Budget Overview */}
-      <View style={styles.card}>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Budget Overview</Text>
-          <Text style={styles.budgetText}>
-            Total Budget: ₹{budgetOverview.totalBudget.toLocaleString()}
-          </Text>
-          <Text style={styles.budgetText}>Spent: ₹{budgetOverview.spent.toLocaleString()}</Text>
-          <Text style={styles.budgetText}>
-            Remaining: ₹{budgetOverview.remaining.toLocaleString()}
-          </Text>
-        </View>
-      </View>
+      <Card title="Budget Overview">
+        <Text style={styles.budgetText}>
+          Total Budget: ₹{budgetOverview.totalBudget.toLocaleString()}
+        </Text>
+        <Text style={styles.budgetText}>Spent: ₹{budgetOverview.spent.toLocaleString()}</Text>
+        <Text style={styles.budgetText}>
+          Remaining: ₹{budgetOverview.remaining.toLocaleString()}
+        </Text>
+      </Card>
 
       {/* Recent Transactions */}
-      <View style={styles.card}>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Recent Transactions</Text>
-          {displayedTransactions.map((transaction) => (
-            <View key={transaction.id} style={styles.transactionItem}>
-              <Icon name="cash" size={20} color="#6200ee" />
-              <View style={styles.transactionDetails}>
-                <Text style={styles.transactionCategory}>{transaction.category}</Text>
-                <Text style={styles.transactionDate}>{transaction.date}</Text>
-              </View>
-              <Text style={styles.transactionAmount}>₹{transaction.amount.toLocaleString()}</Text>
-            </View>
-          ))}
-          {/* Show More Button */}
-          {recentTransactions.length > 3 && (
-            <TouchableOpacity
-              style={styles.showMoreButton}
-              onPress={() => navigation.navigate('Transactions')} // Navigate to Transaction Screen
-            >
-              <Text style={styles.showMoreText}>Show More</Text>
-              <Icon name="chevron-right" size={20} color="#6200ee" />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
+      <Card title="Recent Transactions">
+        {displayedTransactions.map((transaction) => (
+          <TransactionItem
+            key={transaction.id}
+            category={transaction.category}
+            amount={transaction.amount}
+            date={transaction.date}
+          />
+        ))}
+        {recentTransactions.length > 3 && (
+          <ShowMoreButton onPress={() => navigation.navigate('Transactions')} />
+        )}
+      </Card>
 
       {/* Expense Distribution Pie Chart */}
-      <View style={styles.card}>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Expense Distribution</Text>
-          <PieChart
-            data={expenseDistribution}
-            width={width - 40}
-            height={200}
-            chartConfig={{
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            }}
-            accessor="amount"
-            backgroundColor="transparent"
-            paddingLeft="15"
-            absolute
-          />
-        </View>
-      </View>
+      <PieChartCard data={expenseDistribution} title="Expense Distribution" />
 
       {/* Monthly Expenditure Line Chart */}
-      <View style={styles.card}>
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Monthly Expenditure</Text>
-          <LineChart
-            data={monthlyExpenditure}
-            width={width - 40}
-            height={220}
-            yAxisLabel="₹"
-            chartConfig={{
-              backgroundColor: '#ffffff',
-              backgroundGradientFrom: '#ffffff',
-              backgroundGradientTo: '#ffffff',
-              decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-        </View>
-      </View>
+      <LineChartCard data={monthlyExpenditure} title="Monthly Expenditure" />
     </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     padding: 10,
     backgroundColor: '#f5f5f5',
-  },
-  card: {
-    marginBottom: 20,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5, // For Android
-  },
-  cardContent: {
-    padding: 16,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#6200ee',
-    marginBottom: 8,
-  },
-  budgetText: {
-    fontSize: 14,
-    paddingBottom: 5,
   },
   cardAmount: {
     fontSize: 24,
@@ -204,38 +123,10 @@ const styles = StyleSheet.create({
     color: '#000',
     paddingTop: 8,
   },
-  transactionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  transactionDetails: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  transactionCategory: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  transactionDate: {
+  budgetText: {
     fontSize: 14,
-    color: '#666',
+    paddingBottom: 5,
   },
-  transactionAmount: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#6200ee',
-  },
-  showMoreButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  showMoreText: {
-    fontSize: 16,
-    color: '#6200ee',
-    marginRight: 5,
-  },
-});
+};
 
 export default DashboardScreen;

@@ -1,51 +1,56 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ProfileScreen = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+
+  // Profile data
+  const profile = {
+    name: 'Admin',
+    email: 'Admin@example.com',
+    icon: { name: 'account-circle', size: 70, color: '#6a11cb' },
+  };
+
+  // Profile options
+  const options = [
+    { id: 1, icon: 'attach-money', text: 'Currency', color: '#6200ee' },
+    { id: 2, icon: 'settings', text: 'Settings', color: '#6200ee' },
+    { id: 3, icon: 'notifications', text: 'Notifications', color: '#6200ee' },
+    { id: 4, icon: 'help-outline', text: 'Help', color: '#6200ee' },
+    {
+      id: 5,
+      icon: 'logout',
+      text: 'Logout',
+      color: '#ff4444',
+      onPress: () => navigation.navigate('Auth'),
+    },
+  ];
 
   return (
     <View style={styles.container}>
       {/* Profile Header */}
       <View style={styles.profileHeader}>
-        <Icon name="account-circle" size={70} color="#6a11cb" />
-        <Text style={styles.profileName}>Admin</Text>
-        <Text style={styles.profileEmail}>Admin@example.com</Text>
+        <Icon {...profile.icon} />
+        <Text style={styles.profileName}>{profile.name}</Text>
+        <Text style={styles.profileEmail}>{profile.email}</Text>
       </View>
 
       {/* Profile Options */}
       <View style={styles.optionsContainer}>
-        {/* Currency Button */}
-        <TouchableOpacity style={styles.optionButton}>
-          <Icon name="attach-money" size={24} color="#6200ee" />
-          <Text style={styles.optionText}>Currency</Text>
-        </TouchableOpacity>
-
-        {/* Settings Button */}
-        <TouchableOpacity style={styles.optionButton}>
-          <Icon name="settings" size={24} color="#6200ee" />
-          <Text style={styles.optionText}>Settings</Text>
-        </TouchableOpacity>
-
-        {/* Notifications Button */}
-        <TouchableOpacity style={styles.optionButton}>
-          <Icon name="notifications" size={24} color="#6200ee" />
-          <Text style={styles.optionText}>Notifications</Text>
-        </TouchableOpacity>
-
-        {/* Help Button */}
-        <TouchableOpacity style={styles.optionButton}>
-          <Icon name="help-outline" size={24} color="#6200ee" />
-          <Text style={styles.optionText}>Help</Text>
-        </TouchableOpacity>
-
-        {/* Logout Button */}
-        <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('Auth')}>
-          <Icon name="logout" size={24} color="#ff4444" />
-          <Text style={[styles.optionText, { color: '#ff4444' }]}>Logout</Text>
-        </TouchableOpacity>
+        {options.map((option) => (
+          <TouchableOpacity
+            key={option.id}
+            style={styles.optionButton}
+            onPress={option.onPress}
+          >
+            <Icon name={option.icon} size={24} color={option.color} />
+            <Text style={[styles.optionText, { color: option.color }]}>
+              {option.text}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
@@ -62,21 +67,16 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginBottom: 16,
   },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 3,
-    borderColor: '#6200ee',
-  },
   profileName: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
+    marginTop: 8,
   },
   profileEmail: {
     fontSize: 16,
     color: '#666',
+    marginTop: 4,
   },
   optionsContainer: {
     marginTop: 16,
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     marginLeft: 16,
-    color: '#333',
   },
 });
 

@@ -1,7 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, TouchableOpacity, Modal, TextInput, Keyboard, ScrollView, Alert } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, TouchableWithoutFeedback, Alert, Keyboard, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import TransactionCard from '../components/TransactionCard/TransactionCard';
+import SearchFilterBar from '../components/SearchFilterBar/SearchFilterBar';
+import TransactionModal from '../components/TransactionModal/TransactionModal';
+import FilterModal from '../components/FilterModal/FilterModal';
 
 const TransactionManagementScreen = () => {
   const [transactions, setTransactions] = useState([
@@ -90,28 +93,6 @@ const TransactionManagementScreen = () => {
     });
   }, [transactions, searchQuery, filterCategory]);
 
-  // Render Transaction Item
-  const renderTransactionItem = ({ item }) => (
-    <Animated.View entering={FadeIn} exiting={FadeOut}>
-      <View style={styles.transactionCard}>
-        <View style={styles.transactionHeader}>
-          <Text style={styles.transactionCategory}>{item.category}</Text>
-          <Text style={styles.transactionAmount}>₹{item.amount}</Text>
-        </View>
-        <Text style={styles.transactionDescription}>{item.description}</Text>
-        <Text style={styles.transactionDate}>{item.date}</Text>
-        <View style={styles.transactionActions}>
-          <TouchableOpacity onPress={() => openEditModal(item)} style={styles.actionButton}>
-            <Icon name="pencil" size={20} color="#6200ee" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => deleteTransaction(item.id)} style={styles.actionButton}>
-            <Icon name="delete" size={20} color="#ff4444" />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Animated.View>
-  );
-
   // Check if all fields are filled
   const isFormValid = () => {
     return newTransaction.category && newTransaction.description && newTransaction.amount;
@@ -127,39 +108,29 @@ const TransactionManagementScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         {/* Search and Filter Bar */}
-        <View style={styles.searchFilterContainer}>
-          <View style={styles.searchBarContainer}>
-            <Icon name="magnify" size={20} color="#6200ee" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchBar}
-              placeholder="Search transactions"
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-            />
-            {searchQuery.length > 0 && (
-              <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.searchCloseButton}>
-                <Icon name="close" size={20} color="#6200ee" />
-              </TouchableOpacity>
-            )}
-          </View>
-          <TouchableOpacity style={styles.filterButton} onPress={() => setIsFilterModalVisible(true)}>
-            <Icon name="filter" size={20} color="#6200ee" />
-            <Text style={styles.filterText}>{filterCategory}</Text>
-          </TouchableOpacity>
-        </View>
+        <SearchFilterBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          filterCategory={filterCategory}
+          onFilterPress={() => setIsFilterModalVisible(true)}
+        />
 
         {/* Transaction List */}
-
-          <FlatList
-            data={filteredTransactions}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderTransactionItem}
-            contentContainerStyle={styles.transactionList}
-            ListEmptyComponent={
-              <Text style={styles.emptyText}>No transactions found.</Text>
-            }
-            scrollEnabled={true} // Disable scrolling for FlatList since the parent ScrollView handles it
-          />
+        <FlatList
+          data={filteredTransactions}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TransactionCard
+              item={item}
+              onEdit={openEditModal}
+              onDelete={deleteTransaction}
+            />
+          )}
+          contentContainerStyle={styles.transactionList}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No transactions found.</Text>
+          }
+        />
 
         {/* Add Transaction Button */}
         <TouchableOpacity style={styles.addButton} onPress={() => { setIsAddModalVisible(true); resetModalState(); }}>
@@ -167,108 +138,29 @@ const TransactionManagementScreen = () => {
         </TouchableOpacity>
 
         {/* Filter Modal */}
-        <Modal
-          visible={isFilterModalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => setIsFilterModalVisible(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Select Category</Text>
-              <TouchableOpacity style={styles.modalCloseButton} onPress={() => setIsFilterModalVisible(false)}>
-                <Icon name="close" size={20} color="#6200ee" />
-              </TouchableOpacity>
-              <ScrollView>
-                <TouchableOpacity style={styles.modalItem} onPress={() => { setFilterCategory('All'); setIsFilterModalVisible(false); }}>
-                  <Text style={styles.modalItemText}>All</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalItem} onPress={() => { setFilterCategory('Food'); setIsFilterModalVisible(false); }}>
-                  <Text style={styles.modalItemText}>Food</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalItem} onPress={() => { setFilterCategory('Entertainment'); setIsFilterModalVisible(false); }}>
-                  <Text style={styles.modalItemText}>Entertainment</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalItem} onPress={() => { setFilterCategory('Utilities'); setIsFilterModalVisible(false); }}>
-                  <Text style={styles.modalItemText}>Utilities</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalItem} onPress={() => { setFilterCategory('Transport'); setIsFilterModalVisible(false); }}>
-                  <Text style={styles.modalItemText}>Transport</Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          </View>
-        </Modal>
+        <FilterModal
+          isVisible={isFilterModalVisible}
+          onClose={() => setIsFilterModalVisible(false)}
+          onSelectCategory={(category) => {
+            setFilterCategory(category);
+            setIsFilterModalVisible(false);
+          }}
+        />
 
         {/* Add/Edit Transaction Modal */}
-        <Modal
-          visible={isAddModalVisible || isEditModalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => {
+        <TransactionModal
+          isVisible={isAddModalVisible || isEditModalVisible}
+          onClose={() => {
             setIsAddModalVisible(false);
             setIsEditModalVisible(false);
             resetModalState();
           }}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>{isAddModalVisible ? 'Add Transaction' : 'Edit Transaction'}</Text>
-              <TouchableOpacity style={styles.modalCloseButton} onPress={() => { setIsAddModalVisible(false); setIsEditModalVisible(false); resetModalState(); }}>
-                <Icon name="close" size={20} color="#6200ee" />
-              </TouchableOpacity>
-              <View style={styles.categoryContainer}>
-                <Text style={styles.categoryLabel}>Category:</Text>
-                <View style={styles.categoryButtons}>
-                  {['Food', 'Entertainment', 'Utilities', 'Transport'].map((category) => (
-                    <TouchableOpacity
-                      key={category}
-                      style={[
-                        styles.categoryButton,
-                        newTransaction.category === category && styles.selectedCategoryButton,
-                      ]}
-                      onPress={() => setNewTransaction({ ...newTransaction, category })}
-                    >
-                      <Text
-                        style={[
-                          styles.categoryButtonText,
-                          newTransaction.category === category && styles.selectedCategoryText,
-                        ]}
-                      >
-                        {category}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-              <TextInput
-                style={styles.input}
-                placeholder="Description"
-                value={newTransaction.description}
-                onChangeText={(text) => setNewTransaction({ ...newTransaction, description: text })}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Amount"
-                value={newTransaction.amount}
-                onChangeText={(text) => setNewTransaction({ ...newTransaction, amount: text.replace(/[^0-9]/g, '') })}
-                keyboardType="numeric"
-              />
-              <View style={styles.modalButtons}>
-                <TouchableOpacity
-                  style={[styles.saveButton, !isFormValid() && styles.disabledButton]}
-                  onPress={isAddModalVisible ? addTransaction : saveEditedTransaction}
-                  disabled={!isFormValid()}
-                >
-                  <Text style={styles.buttonText}>{isAddModalVisible ? 'Add' : 'Save'}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.cancelButton} onPress={() => { setIsAddModalVisible(false); setIsEditModalVisible(false); resetModalState(); }}>
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+          isAddModal={isAddModalVisible}
+          newTransaction={newTransaction}
+          setNewTransaction={setNewTransaction}
+          onSave={isAddModalVisible ? addTransaction : saveEditedTransaction}
+          isFormValid={isFormValid()}
+        />
       </View>
     </TouchableWithoutFeedback>
   );

@@ -2,8 +2,8 @@ import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context'; // Import SafeAreaProvider
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import AuthNavigator from './src/navigation/AuthNavigator';
-import HomeNavigator from './src/navigation/HomeNavigator';
+import AuthNavigator from './navigation/AuthNavigator';
+import HomeNavigator from './navigation/HomeNavigator';
 
 const Stack = createStackNavigator();
 
