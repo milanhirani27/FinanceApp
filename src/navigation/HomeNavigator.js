@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashboardScreen from '../screens/DashboardScreen';
 import TransactionManagementScreen from '../screens/TransactionManagementScreen';
 import BudgetManagementScreen from '../screens/BudgetManagementScreen';
-import CurrencyConversionScreen from '../screens/CurrencyConversionScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();

@@ -1,5 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { View, FlatList, Text, TouchableOpacity, TouchableWithoutFeedback, Alert, Keyboard, StyleSheet } from 'react-native';
+import React, {useState, useMemo} from 'react';
+import {
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Alert,
+  Keyboard,
+  StyleSheet,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TransactionCard from '../components/TransactionCard/TransactionCard';
 import SearchFilterBar from '../components/SearchFilterBar/SearchFilterBar';
@@ -8,11 +17,46 @@ import FilterModal from '../components/FilterModal/FilterModal';
 
 const TransactionManagementScreen = () => {
   const [transactions, setTransactions] = useState([
-    { id: 1, date: '2025-03-07', amount: 500, category: 'Food', description: 'Lunch at Cafe' },
-    { id: 2, date: '2025-03-07', amount: 300, category: 'Entertainment', description: 'Movie tickets' },
-    { id: 3, date: '2025-03-07', amount: 700, category: 'Utilities', description: 'Electricity bill' },
-    { id: 4, date: '2025-03-07', amount: 300, category: 'Entertainment', description: 'Movie tickets' },
-    { id: 5, date: '2025-03-07', amount: 300, category: 'Entertainment', description: 'Movie tickets' },
+    {
+      id: 1,
+      date: '2025-03-07',
+      amount: 500,
+      currency: 'INR',
+      category: 'Food',
+      description: 'Lunch at Cafe',
+    },
+    {
+      id: 2,
+      date: '2025-03-07',
+      amount: 300,
+      currency: 'INR',
+      category: 'Entertainment',
+      description: 'Movie tickets',
+    },
+    {
+      id: 3,
+      date: '2025-03-07',
+      amount: 700,
+      currency: 'INR',
+      category: 'Utilities',
+      description: 'Electricity bill',
+    },
+    {
+      id: 4,
+      date: '2025-03-07',
+      amount: 300,
+      currency: 'INR',
+      category: 'Entertainment',
+      description: 'Movie tickets',
+    },
+    {
+      id: 5,
+      date: '2025-03-07',
+      amount: 300,
+      currency: 'INR',
+      category: 'Entertainment',
+      description: 'Movie tickets',
+    },
   ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('All');
@@ -24,83 +68,109 @@ const TransactionManagementScreen = () => {
     category: '',
     description: '',
     amount: '',
+    currency: 'INR',
     date: new Date().toISOString().split('T')[0],
   });
+  const currencies = [
+    {code: 'INR', symbol: '₹', rate: 1}, // Base currency
+    {code: 'USD', symbol: '$', rate: 75}, // 1 USD = 75 INR
+    {code: 'EUR', symbol: '€', rate: 85}, // 1 EUR = 85 INR
+  ];
 
-  // Add Transaction
-  const addTransaction = () => {
+  // Convert amount from INR to the selected currency
+  const convertFromINR = (amountInINR, currency) => {
+    const selectedCurrency = currencies.find(c => c.code === currency);
+    if (!selectedCurrency) return amountInINR;
+    return (parseFloat(amountInINR) / selectedCurrency.rate).toFixed(2);
+  };
+
+  // Save Edited Transaction (updated)
+  const saveEditedTransaction = updatedTransaction => {
+    if (selectedTransaction) {
+      const updatedTransactions = transactions.map(transaction =>
+        transaction.id === selectedTransaction.id
+          ? {...transaction, ...updatedTransaction}
+          : transaction,
+      );
+      setTransactions(updatedTransactions);
+      setIsEditModalVisible(false);
+      resetModalState();
+    }
+  };
+
+  // Handle save transaction
+  const handleSave = transaction => {
     const newTransactionItem = {
       id: transactions.length + 1,
-      date: newTransaction.date,
-      amount: parseFloat(newTransaction.amount),
-      category: newTransaction.category,
-      description: newTransaction.description,
+      ...transaction,
     };
     setTransactions([...transactions, newTransactionItem]);
     setIsAddModalVisible(false);
-    setNewTransaction({ category: '', description: '', amount: '', date: new Date().toISOString().split('T')[0] });
+    setNewTransaction({
+      category: '',
+      description: '',
+      amount: '',
+      currency: 'INR',
+      date: new Date().toISOString().split('T')[0],
+    });
   };
 
   // Open Edit Modal
-  const openEditModal = (transaction) => {
+  const openEditModal = transaction => {
+    const amountInSelectedCurrency = convertFromINR(
+      transaction.amount,
+      transaction.currency,
+    );
     setSelectedTransaction(transaction);
     setNewTransaction({
       category: transaction.category,
       description: transaction.description,
-      amount: transaction.amount.toString(),
+      amount: amountInSelectedCurrency, // Convert amount to the selected currency
+      currency: transaction.currency,
       date: transaction.date,
     });
     setIsEditModalVisible(true);
   };
 
-  // Save Edited Transaction
-  const saveEditedTransaction = () => {
-    if (selectedTransaction) {
-      const updatedTransactions = transactions.map((transaction) =>
-        transaction.id === selectedTransaction.id
-          ? {
-              ...transaction,
-              category: newTransaction.category,
-              description: newTransaction.description,
-              amount: parseFloat(newTransaction.amount),
-              date: newTransaction.date,
-            }
-          : transaction
-      );
-      setTransactions(updatedTransactions);
-      setIsEditModalVisible(false);
-    }
-  };
-
   // Delete Transaction with Confirmation
-  const deleteTransaction = (id) => {
+  const deleteTransaction = id => {
     Alert.alert(
       'Delete Transaction',
       'Are you sure you want to delete this transaction?',
       [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'OK', onPress: () => setTransactions(transactions.filter((transaction) => transaction.id !== id)) },
-      ]
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'OK',
+          onPress: () =>
+            setTransactions(
+              transactions.filter(transaction => transaction.id !== id),
+            ),
+        },
+      ],
     );
   };
 
   // Search and Filter
   const filteredTransactions = useMemo(() => {
-    return transactions.filter((transaction) => {
-      const matchesSearch = transaction.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = filterCategory === 'All' || transaction.category === filterCategory;
+    return transactions.filter(transaction => {
+      const matchesSearch = transaction.description
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        filterCategory === 'All' || transaction.category === filterCategory;
       return matchesSearch && matchesCategory;
     });
   }, [transactions, searchQuery, filterCategory]);
 
-  // Check if all fields are filled
-  const isFormValid = () => {
-    return newTransaction.category && newTransaction.description && newTransaction.amount;
-  };
-
   // Reset Modal State
   const resetModalState = () => {
-    setNewTransaction({ category: '', description: '', amount: '', date: new Date().toISOString().split('T')[0] });
+    setNewTransaction({
+      category: '',
+      description: '',
+      amount: '',
+      currency: 'INR',
+      date: new Date().toISOString().split('T')[0],
+    });
     setSelectedTransaction(null);
   };
 
@@ -118,8 +188,8 @@ const TransactionManagementScreen = () => {
         {/* Transaction List */}
         <FlatList
           data={filteredTransactions}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
             <TransactionCard
               item={item}
               onEdit={openEditModal}
@@ -133,7 +203,12 @@ const TransactionManagementScreen = () => {
         />
 
         {/* Add Transaction Button */}
-        <TouchableOpacity style={styles.addButton} onPress={() => { setIsAddModalVisible(true); resetModalState(); }}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            setIsAddModalVisible(true);
+            resetModalState();
+          }}>
           <Icon name="plus" size={24} color="#fff" />
         </TouchableOpacity>
 
@@ -141,7 +216,7 @@ const TransactionManagementScreen = () => {
         <FilterModal
           isVisible={isFilterModalVisible}
           onClose={() => setIsFilterModalVisible(false)}
-          onSelectCategory={(category) => {
+          onSelectCategory={category => {
             setFilterCategory(category);
             setIsFilterModalVisible(false);
           }}
@@ -151,15 +226,20 @@ const TransactionManagementScreen = () => {
         <TransactionModal
           isVisible={isAddModalVisible || isEditModalVisible}
           onClose={() => {
-            setIsAddModalVisible(false);
-            setIsEditModalVisible(false);
+            if (isAddModalVisible) setIsAddModalVisible(false);
+            else setIsEditModalVisible(false);
             resetModalState();
           }}
           isAddModal={isAddModalVisible}
           newTransaction={newTransaction}
           setNewTransaction={setNewTransaction}
-          onSave={isAddModalVisible ? addTransaction : saveEditedTransaction}
-          isFormValid={isFormValid()}
+          onSave={isAddModalVisible ? handleSave : saveEditedTransaction} // Pass saveEditedTransaction
+          isFormValid={
+            newTransaction.category &&
+            newTransaction.description &&
+            newTransaction.amount
+          }
+          convertFromINR={convertFromINR} // Pass the conversion function
         />
       </View>
     </TouchableWithoutFeedback>
@@ -227,7 +307,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
@@ -276,7 +356,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
@@ -299,7 +379,7 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
