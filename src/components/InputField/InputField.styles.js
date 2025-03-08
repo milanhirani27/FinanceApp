@@ -1,4 +1,3 @@
-// src/components/InputField/InputField.styles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({

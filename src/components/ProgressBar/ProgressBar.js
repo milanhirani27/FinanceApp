@@ -1,4 +1,3 @@
-// src/components/ProgressBar/ProgressBar.js
 import React from 'react';
 import { View } from 'react-native';
 import * as Progress from 'react-native-progress';

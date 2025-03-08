@@ -1,0 +1,235 @@
+import {StyleSheet} from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f5f5f5',
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  searchFilterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  searchBarContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchBar: {
+    flex: 1,
+    fontSize: 16,
+  },
+  searchCloseButton: {
+    marginLeft: 8,
+  },
+  filterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginLeft: 8,
+  },
+  filterText: {
+    marginLeft: 8,
+    color: '#6200ee',
+    fontSize: 16,
+  },
+  transactionList: {
+    paddingBottom: 16,
+  },
+  transactionCard: {
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    padding: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  transactionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  transactionCategory: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#6200ee',
+  },
+  transactionAmount: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  transactionDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  transactionDate: {
+    fontSize: 12,
+    color: '#999',
+  },
+  transactionActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 8,
+  },
+  actionButton: {
+    marginHorizontal: 8,
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    backgroundColor: '#6200ee',
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#999',
+    marginTop: 24,
+    fontSize: 16,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContainer: {
+    width: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
+    color: '#6200ee',
+  },
+  modalCloseButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+  },
+  modalItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  modalItemText: {
+    fontSize: 16,
+    color: '#6200ee',
+  },
+  input: {
+    marginBottom: 16,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  saveButton: {
+    flex: 1,
+    marginRight: 8,
+    backgroundColor: '#6200ee',
+    borderRadius: 8,
+    padding: 12,
+    alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  cancelButton: {
+    flex: 1,
+    marginLeft: 8,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#6200ee',
+    borderRadius: 8,
+    padding: 12,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  cancelButtonText: {
+    color: '#6200ee',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  categoryContainer: {
+    marginBottom: 16,
+  },
+  categoryLabel: {
+    fontSize: 16,
+    color: '#6200ee',
+    marginBottom: 8,
+  },
+  categoryButtons: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  categoryButton: {
+    padding: 8,
+    margin: 4,
+    backgroundColor: '#eee',
+    borderRadius: 8,
+  },
+  selectedCategoryButton: {
+    backgroundColor: '#6200ee',
+  },
+  categoryButtonText: {
+    fontSize: 14,
+    color: '#000',
+  },
+  selectedCategoryText: {
+    color: '#fff',
+  },
+});
+
+export default styles;

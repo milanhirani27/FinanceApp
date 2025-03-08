@@ -1,4 +1,3 @@
-// src/components/BudgetItem/BudgetItem.styles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({

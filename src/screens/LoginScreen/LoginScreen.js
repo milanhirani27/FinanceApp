@@ -1,13 +1,13 @@
-// src/screens/LoginScreen.js
 import React, { useState } from 'react';
 import { Text, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Animated, { useSharedValue, withSpring, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
-import InputField from '../components/InputField/InputField';
-import Button from '../components/Button/Button';
-import AnimatedLogo from '../components/AnimatedLogo/AnimatedLogo';
-import FormContainer from '../components/FormContainer/FormContainer';
+import InputField from '../../components/InputField/InputField';
+import Button from '../../components/Button/Button';
+import AnimatedLogo from '../../components/AnimatedLogo/AnimatedLogo';
+import FormContainer from '../../components/FormContainer/FormContainer';
+import styles from './LoginScreen.styles';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -94,31 +94,6 @@ const LoginScreen = () => {
       </KeyboardAvoidingView>
     </LinearGradient>
   );
-};
-
-const styles = {
-  container: {
-    flex: 1,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  footerText: {
-    marginTop: 20,
-    textAlign: 'center',
-    color: '#666',
-  },
-  footerLink: {
-    color: '#6200ee',
-    fontWeight: 'bold',
-  },
 };
 
 export default LoginScreen;

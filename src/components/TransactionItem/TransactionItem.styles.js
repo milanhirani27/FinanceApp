@@ -1,4 +1,3 @@
-// src/components/TransactionItem/TransactionItem.styles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({

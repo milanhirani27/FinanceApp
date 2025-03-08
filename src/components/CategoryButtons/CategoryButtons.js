@@ -1,4 +1,3 @@
-// src/components/CategoryButtons/CategoryButtons.js
 import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import styles from './CategoryButtons.styles';

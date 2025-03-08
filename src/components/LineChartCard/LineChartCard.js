@@ -1,4 +1,3 @@
-// src/components/LineChartCard/LineChartCard.js
 import React from 'react';
 import { View, Text } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';

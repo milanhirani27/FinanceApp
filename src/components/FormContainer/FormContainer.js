@@ -1,4 +1,3 @@
-// src/components/FormContainer/FormContainer.js
 import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './FormContainer.styles';

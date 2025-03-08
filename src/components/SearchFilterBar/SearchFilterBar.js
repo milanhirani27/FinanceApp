@@ -1,4 +1,3 @@
-// src/components/SearchFilterBar/SearchFilterBar.js
 import React from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

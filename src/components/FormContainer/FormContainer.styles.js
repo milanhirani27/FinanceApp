@@ -1,4 +1,3 @@
-// src/components/FormContainer/FormContainer.styles.js
 import { StyleSheet, Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
 
