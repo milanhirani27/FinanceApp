@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { OPEN_EXCHANGE_API } from '@env';
 
-const APP_ID = 'be15e9411a3a487dbe4962c1fa64c1c4';
+// add API key from open exchange rates
+const APP_ID = OPEN_EXCHANGE_API;
 
 export const fetchExchangeRates = async () => {
   try {
