@@ -24,7 +24,6 @@ const LoginScreen = () => {
   const logoScale = useSharedValue(1);
 
   const handleLogin = () => {
-    navigation.replace('Home', { screen: 'Dashboard' });
     setUsernameError('');
     setPasswordError('');
     setError('');

@@ -26,22 +26,6 @@ const initialState = {
       category: 'Utilities',
       description: 'Electricity bill',
     },
-    {
-      id: 4,
-      date: '2025-03-07',
-      amount: 300,
-      currency: 'INR',
-      category: 'Entertainment',
-      description: 'Movie tickets',
-    },
-    {
-      id: 5,
-      date: '2025-03-07',
-      amount: 300,
-      currency: 'INR',
-      category: 'Entertainment',
-      description: 'Movie tickets',
-    },
   ],
 };
 

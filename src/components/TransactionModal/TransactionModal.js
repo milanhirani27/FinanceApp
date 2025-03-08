@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,13 +9,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CategoryButtons from '../CategoryButtons/CategoryButtons';
+import { fetchExchangeRates } from '../../utils/fetchExchangeRates';
 import styles from './TransactionModal.styles';
-
-const currencies = [
-  {code: 'INR', symbol: '₹', rate: 1}, // Base currency
-  {code: 'USD', symbol: '$', rate: 75}, // 1 USD = 75 INR
-  {code: 'EUR', symbol: '€', rate: 85}, // 1 EUR = 85 INR
-];
 
 const TransactionModal = ({
   isVisible,
@@ -28,6 +23,18 @@ const TransactionModal = ({
   convertFromINR,
 }) => {
   const [isCurrencyDropdownVisible, setIsCurrencyDropdownVisible] = useState(false);
+  const [currencies, setCurrencies] = useState([]);
+
+  useEffect(() => {
+    const getCurrencies = async () => {
+      const data = await fetchExchangeRates();
+      if (data) {        
+        setCurrencies(data);
+      }
+    };
+
+    getCurrencies();
+  }, []);
 
   const handleCurrencySelect = currency => {
     const selectedCurrency = currencies.find(c => c.code === currency);
@@ -47,7 +54,6 @@ const TransactionModal = ({
     const parsedAmount = parseFloat(amount || 0);
     const selectedCurrency = currencies.find(c => c.code === currency);
     if (!selectedCurrency) {
-      console.log('Invalid currency:', currency);
       return parsedAmount;
     }
     return parsedAmount * selectedCurrency.rate;
