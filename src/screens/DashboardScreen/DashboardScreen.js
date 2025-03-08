@@ -1,6 +1,6 @@
-// src/screens/DashboardScreen.js
 import React from 'react';
 import { ScrollView, Text } from 'react-native';
+import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import Card from '../../components/Card/Card';
 import TransactionItem from '../../components/TransactionItem/TransactionItem';
@@ -9,16 +9,18 @@ import PieChartCard from '../../components/PieChartCard/PieChartCard';
 import LineChartCard from '../../components/LineChartCard/LineChartCard';
 import BudgetOverviewCard from '../../components/BudgetOverviewCard/BudgetOverviewCard';
 import styles from './DashboardScreen.styles';
-import {
-  totalBalance,
-  budgetOverview,
-  recentTransactions,
-  expenseDistribution,
-  monthlyExpenditure
-} from '../../constants/dashboardData';
 
 const DashboardScreen = () => {
   const navigation = useNavigation();
+
+  const {
+    totalBalance,
+    budgetOverview,
+    recentTransactions,
+    expenseDistribution,
+    monthlyExpenditure,
+  } = useSelector((state) => state.dashboard);
+
   const displayedTransactions = recentTransactions.slice(0, 3);
 
   return (
@@ -26,7 +28,7 @@ const DashboardScreen = () => {
       <Card title="Total Balance">
         <Text style={styles.cardAmount}>₹{totalBalance.toLocaleString()}</Text>
       </Card>
-      <BudgetOverviewCard budgetOverview={budgetOverview} title={'Budget Overview'}/>
+      <BudgetOverviewCard budgetOverview={budgetOverview} title={'Budget Overview'} />
       <Card title="Recent Transactions">
         {displayedTransactions.map((transaction) => (
           <TransactionItem

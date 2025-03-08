@@ -50,7 +50,18 @@ export default newTransactionData = {
 };
 
 export const currencies = [
-    {code: 'INR', symbol: '₹', rate: 1}, // Base currency
-    {code: 'USD', symbol: '$', rate: 75}, // 1 USD = 75 INR
-    {code: 'EUR', symbol: '€', rate: 85}, // 1 EUR = 85 INR
+    {code: 'INR', symbol: '₹', rate: 1},
+    {code: 'USD', symbol: '$', rate: 75},
+    {code: 'EUR', symbol: '€', rate: 85},
   ];
+
+export const monthlyExpenditure = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July'],
+    datasets: [
+      {
+        data: [5000, 6000, 5500, 7000, 6500, 8000, 6000],
+        color: 'rgba(134, 65, 244, 1)',
+        strokeWidth: 2,
+      },
+    ],
+  };

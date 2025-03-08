@@ -7,9 +7,12 @@ import InputField from '../../components/InputField/InputField';
 import Button from '../../components/Button/Button';
 import AnimatedLogo from '../../components/AnimatedLogo/AnimatedLogo';
 import FormContainer from '../../components/FormContainer/FormContainer';
+import { loginSuccess, loginFailure } from '../../redux/slices/authSlice';
 import styles from './LoginScreen.styles';
+import { useDispatch } from 'react-redux';
 
 const LoginScreen = () => {
+  const dispatch = useDispatch();  
   const navigation = useNavigation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -21,6 +24,7 @@ const LoginScreen = () => {
   const logoScale = useSharedValue(1);
 
   const handleLogin = () => {
+    navigation.replace('Home', { screen: 'Dashboard' });
     setUsernameError('');
     setPasswordError('');
     setError('');
@@ -45,9 +49,11 @@ const LoginScreen = () => {
       setError('');
       translateY.value = withSpring(-100, { damping: 10 });
       opacity.value = withTiming(0, { duration: 500 });
+      dispatch(loginSuccess({ username }));
       navigation.replace('Home', { screen: 'Dashboard' });
     } else {
       setError('Invalid credentials');
+      dispatch(loginFailure('Invalid credentials'));
       logoScale.value = withSpring(1.1, { damping: 2 }, () => {
         logoScale.value = withSpring(1);
       });

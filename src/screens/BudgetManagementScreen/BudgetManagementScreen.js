@@ -1,14 +1,16 @@
-// src/screens/BudgetManagementScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Alert, Text, TouchableOpacity } from 'react-native';
+import { View, FlatList, Alert, Text } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import BudgetItem from '../../components/BudgetItem/BudgetItem';
 import BudgetModal from '../../components/BudgetModal/BudgetModal';
 import AddButton from '../../components/AddButton/AddButton';
 import styles from './BudgetManagementScreen.styles';
-import { budgetData } from '../../constants/BudgetManagementData';
+import { addBudget, editBudget, deleteBudget } from '../../redux/slices/budgetSlice';
 
 const BudgetManagementScreen = () => {
-  const [budgets, setBudgets] = useState(budgetData);
+  const dispatch = useDispatch();
+  const budgets = useSelector((state) => state.budget.budgets);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalType, setModalType] = useState('add');
   const [selectedBudget, setSelectedBudget] = useState(null);
@@ -63,36 +65,32 @@ const BudgetManagementScreen = () => {
     }
 
     if (modalType === 'add') {
-      const newBudgetItem = {
-        id: budgets.length + 1,
-        category,
-        budget: parseFloat(budgetAmount),
-        spent: 0,
-      };
-      setBudgets([...budgets, newBudgetItem]);
-    } else if (modalType === 'edit' && selectedBudget) {
-      const updatedBudgets = budgets.map((budget) =>
-        budget.id === selectedBudget.id
-          ? {
-              ...budget,
-              category,
-              budget: parseFloat(budgetAmount),
-              spent: parseFloat(spentAmount),
-            }
-          : budget
+      dispatch(
+        addBudget({
+          category,
+          budget: parseFloat(budgetAmount),
+        })
       );
-      setBudgets(updatedBudgets);
+    } else if (modalType === 'edit' && selectedBudget) {
+      dispatch(
+        editBudget({
+          id: selectedBudget.id,
+          category,
+          budget: parseFloat(budgetAmount),
+          spent: parseFloat(spentAmount),
+        })
+      );
     }
     closeModal();
   };
 
-  const deleteBudget = (id) => {
+  const handleDeleteBudget = (id) => {
     Alert.alert(
       'Delete Budget',
       'Are you sure you want to delete this budget?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'OK', onPress: () => setBudgets(budgets.filter((budget) => budget.id !== id)) },
+        { text: 'OK', onPress: () => dispatch(deleteBudget(id)) },
       ]
     );
   };
@@ -106,7 +104,7 @@ const BudgetManagementScreen = () => {
           <BudgetItem
             item={item}
             onEdit={() => openModal('edit', item)}
-            onDelete={deleteBudget}
+            onDelete={() => handleDeleteBudget(item.id)}
           />
         )}
         contentContainerStyle={styles.budgetList}
