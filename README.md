@@ -8,6 +8,11 @@ A comprehensive mobile application for managing personal finances, offering **bu
 
 ---
 
+## Video
+https://github.com/user-attachments/assets/94868e33-d4de-4436-ac93-2f0d3af1d289
+
+---
+
 ## 📸 Screenshots 
 View app screenshots in the [`/screenshots`](./screenshots/) folder.  
 
