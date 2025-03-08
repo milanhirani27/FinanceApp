@@ -44,17 +44,17 @@ npm install
 yarn install
 ```
 
-## 🔑 API Configuration
+## 3: API Configuration
 
 ### Add OpenExchange Rates API Key
 1. Create a `.env` file in the root directory of your project
 2. Add your API key using this format:
 
 ```env
-OPEN_EXCHANGE_RATES_API_KEY=your_api_key_here
+OPEN_EXCHANGE_API=your_api_key_here
 ```
 
-## 3: Start Metro
+## 4: Start Metro
 
 ```bash
 # using npm
@@ -64,7 +64,7 @@ npm start
 yarn start
 ```
 
-## 4: Start your Application
+## 5: Start your Application
 
 ### For Android
 
