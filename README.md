@@ -100,3 +100,10 @@ npm run ios
 # OR using Yarn
 yarn ios
 ```
+
+## Login Credentials
+
+> **Note**: This app uses dummy data for demonstration purposes.  
+> Use the following credentials to log in:
+> - **Username**: `Admin`  
+> - **Password**: `123` 
