@@ -8,8 +8,12 @@ A comprehensive mobile application for managing personal finances, offering **bu
 
 ---
 
-## Video
+## Video for IOS
 https://github.com/user-attachments/assets/94868e33-d4de-4436-ac93-2f0d3af1d289
+
+---
+
+## Video for Android
 https://github.com/user-attachments/assets/c6eea320-885a-42c3-8b61-6af857a1289d
 
 ---
