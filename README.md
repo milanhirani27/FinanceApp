@@ -10,18 +10,14 @@ A comprehensive mobile application for managing personal finances, offering **bu
 
 ## 📸 Screenshots 
 View app screenshots in the [`/screenshots`](./screenshots/) folder.  
-*Replace the example below with your actual screenshots:*
-
-![Expense Tracking](./screenshots/example.png) <!-- Update path -->
 
 ---
 
 ## ✨ Features
+- **Financial Insights**: Charts and reports.
 - **Budget Tracking**: Set and monitor monthly budgets.
 - **Expense Management**: Categorize transactions.
-- **Financial Insights**: Charts and reports.
 - **Multi-Currency**: Real-time rates via OpenExchange.
-- **Offline Sync**: Works without internet.
 
 ---
 
@@ -36,6 +32,7 @@ View app screenshots in the [`/screenshots`](./screenshots/) folder.
 ```bash
 git clone git@github.com:milanhirani27/FinanceApp.git
 cd FinanceApp
+```
 
 ## 2: Install Dependencies
 
@@ -47,8 +44,7 @@ npm install
 yarn install
 ```
 
-
-### 3: Start Metro
+## 3: Start Metro
 
 ```bash
 # using npm
@@ -57,7 +53,6 @@ npm start
 # OR using Yarn
 yarn start
 ```
-
 
 ## 4: Start your Application
 
