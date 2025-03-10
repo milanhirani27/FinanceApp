@@ -1,8 +1,6 @@
-// src/components/BudgetItem/BudgetItem.js
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import styles from './BudgetItem.styles';
 
@@ -12,7 +10,7 @@ const BudgetItem = ({ item, onEdit, onDelete }) => {
   const isApproaching = utilization >= 0.8;
 
   return (
-    <Animated.View entering={FadeIn} exiting={FadeOut}>
+    <View>
       <View style={styles.budgetCard}>
         <View style={styles.budgetHeader}>
           <Text style={styles.budgetCategory}>{item.category}</Text>
@@ -31,7 +29,7 @@ const BudgetItem = ({ item, onEdit, onDelete }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 

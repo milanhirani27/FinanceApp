@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Text, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { Text, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Animated, { useSharedValue, withSpring, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import InputField from '../../components/InputField/InputField';
 import Button from '../../components/Button/Button';
@@ -19,9 +18,6 @@ const LoginScreen = () => {
   const [error, setError] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const translateY = useSharedValue(0);
-  const opacity = useSharedValue(1);
-  const logoScale = useSharedValue(1);
 
   const handleLogin = () => {
     setUsernameError('');
@@ -46,32 +42,20 @@ const LoginScreen = () => {
 
     if (username.toLowerCase() === 'admin' && password === '123') {
       setError('');
-      translateY.value = withSpring(-100, { damping: 10 });
-      opacity.value = withTiming(0, { duration: 500 });
       dispatch(loginSuccess({ username }));
       navigation.replace('Home', { screen: 'Dashboard' });
     } else {
       setError('Invalid credentials');
       dispatch(loginFailure('Invalid credentials'));
-      logoScale.value = withSpring(1.1, { damping: 2 }, () => {
-        logoScale.value = withSpring(1);
-      });
     }
   };
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: translateY.value }],
-      opacity: opacity.value,
-    };
-  });
 
   return (
     <LinearGradient colors={['#6a11cb', '#2575fc']} style={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
-          <AnimatedLogo scale={logoScale} />
-          <Animated.View style={[animatedStyle]}>
+          <AnimatedLogo />
+          <View>
             <FormContainer title="Login" subtitle="Please sign in to continue">
               <InputField
                 placeholder="Username"
@@ -94,7 +78,7 @@ const LoginScreen = () => {
                 Don't have an account? <Text style={styles.footerLink}>Sign up</Text>
               </Text>
             </FormContainer>
-          </Animated.View>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </LinearGradient>

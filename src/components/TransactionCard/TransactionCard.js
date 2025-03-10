@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import styles from './TransactionCard.styles';
 
 const TransactionCard= ({ item, onEdit, onDelete }) => {
   return (
-    <Animated.View entering={FadeIn} exiting={FadeOut}>
+    <View>
       <View style={styles.transactionCard}>
         <View style={styles.transactionHeader}>
           <Text style={styles.transactionCategory}>{item.category}</Text>
@@ -23,7 +22,7 @@ const TransactionCard= ({ item, onEdit, onDelete }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 
